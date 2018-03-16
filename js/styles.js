@@ -5,6 +5,8 @@
 
 $(document).ready(function(){
 
+  var is_notebook = $(".notebook_app").length;
+
   /* ============================================= 
     Remove unnecessary classes
   ============================================== */
@@ -59,6 +61,11 @@ $(document).ready(function(){
   })
 
   /* Default view is hidden */
-  setCodeToHide(section_inputs, section_buttons, 0);
+
+  if (is_notebook) {
+    setCodeToShow(section_inputs, section_buttons, 0);
+  } else {
+    setCodeToHide(section_inputs, section_buttons, 0);
+  }
 
 });
