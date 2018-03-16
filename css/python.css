@@ -157,4 +157,13 @@ div.output_text {
   background-color: var(--heading-color-50); 
   border-color: transparent;
 }
-
+/*
+=========================================
+    Plotly Plots
+=========================================
+*/
+/* Centerize */
+.output_html.output_subarea {
+  margin-left: auto;
+  margin-right: auto;
+}

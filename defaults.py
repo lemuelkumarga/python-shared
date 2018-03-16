@@ -1,11 +1,41 @@
 
 """ =================================
+    Load Packages
+================================= """
+
+'''
+@input packages a list of key value pairs, where:
+                key is the alias of the module
+                value is the name of the module itself
+@input subpackages a list of key value pairs, where:
+                   key is the alias of the submodule
+                   value is the name of the submodule itself
+'''
+def load(packages, subpackages):
+    uninstalled_str = ""
+        
+    for k, v in packages.items():
+        try:
+            globals()[k] = __import__(v)
+        except ImportError:
+            uninstalled_str += v + " "
+            pass;
+
+    if (uninstalled_str != ""):
+        print("Some modules doesn't exist. Please install on terminal using: sudo pip install " + uninstalled_str);
+    
+    for k, v in subpackages.items():
+        exec("globals()['"+k+"'] = " + v)
+
+
+""" =================================
     Load Header (CSS + JS) Files
 ================================= """
 
-from IPython.core.display import HTML
+load({"ip" : "IPython"},
+     {"HTML" : "ip.core.display.HTML"})
 
-def load_headers():
+def stylize():
 
     css_files = ['shared/css/defaults.css',
                  '../../shared/css/definitions.css',
@@ -25,4 +55,17 @@ def load_headers():
 
     return HTML(head_str)
 
+""" =================================
+    Startup Function
+================================= """
 
+load({"py" : "plotly"},
+     {"plot" : "py.offline"})
+
+def defaults():
+
+    # Initialize pyplot notebook
+    plot.init_notebook_mode(connected=True)
+
+    # Output HTML File
+    return stylize()
