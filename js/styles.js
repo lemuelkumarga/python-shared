@@ -8,8 +8,15 @@ $(document).ready(function(){
   var is_notebook = $(".notebook_app").length;
 
   /* ============================================= 
-    On Mobiles: Reduce Width Instead of Zooming Out
+    Edit Metadata
   ============================================== */
+
+  /* Change Title 
+    Courtesy of Jonathan Arbely
+    https://stackoverflow.com/questions/3442394/using-text-to-retrieve-only-text-not-nested-in-child-tags */
+  $("title").html($("h1").clone().children().remove().end().text())
+
+  /* On Mobiles: Reduce Width Instead of Zooming Out */
   $("head").append('<meta name="viewport" content="width=device-width, initial-scale=1">')
   
   /* ============================================= 
