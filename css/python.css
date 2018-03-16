@@ -31,6 +31,9 @@ p {
 @media (min-width: 370px) {
     p, ul, ol { text-align: justify; }
 }
+
+/* Remove Anchor Links */
+.anchor-link { display:none }
 /*
 =========================================
     Code Blocks
@@ -163,7 +166,8 @@ div.output_text {
 =========================================
 */
 /* Centerize */
-.output_html.output_subarea {
-  margin-left: auto;
-  margin-right: auto;
+.output_html.output_subarea,
+.svg-container {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
