@@ -168,6 +168,7 @@ div.output_text {
 /* Centerize */
 .output_html.output_subarea,
 .svg-container {
+  min-width: 300px;
   margin-left: auto !important;
   margin-right: auto !important;
 }

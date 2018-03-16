@@ -8,6 +8,11 @@ $(document).ready(function(){
   var is_notebook = $(".notebook_app").length;
 
   /* ============================================= 
+    On Mobiles: Reduce Width Instead of Zooming Out
+  ============================================== */
+  $("head").append('<meta name="viewport" content="width=device-width, initial-scale=1">')
+  
+  /* ============================================= 
     Remove unnecessary classes
   ============================================== */
     
