@@ -22,12 +22,12 @@ $(document).ready(function(){
 
   var h = $('head')
   $.each(css_files, function(i, css_file) {
-    if (!("html_only" in css_file && css_file['html_only'] && !is_notebook)) {
+    if (!("html_only" in css_file && css_file['html_only'] && is_notebook)) {
       h.append('<link href="' + css_file['link'] + '" rel="stylesheet">')
     }
   })
   $.each(js_files, function(i, js_file) {
-    if (!("html_only" in js_file && js_file['html_only'] && !is_notebook)) {
+    if (!("html_only" in js_file && js_file['html_only'] && is_notebook)) {
       h.append('<script src="' + js_file['link'] + '"></script>')
     }
   })
