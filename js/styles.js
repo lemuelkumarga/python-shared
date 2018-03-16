@@ -6,32 +6,9 @@
 $(document).ready(function(){
 
   /* ============================================= 
-    CSS Styles
+    Remove unnecessary classes
   ============================================== */
     
-  var is_notebook = $(".notebook_app").length;
-
-  var css_files = [{'link': 'shared/css/defaults.css' },
-                   {'link': '../../shared/css/definitions.css'},
-                   {'link': '../../shared/css/general.css'},
-                   {'link': 'shared/css/python.css'}]
-
-  var js_files = [{'link': 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js' },
-                  {'link': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', html_only : true},
-                  {'link': 'shared/js/popover.js', html_only: true}];
-
-  var h = $('head')
-  $.each(css_files, function(i, css_file) {
-    if (!("html_only" in css_file && css_file['html_only'] && is_notebook)) {
-      h.append('<link href="' + css_file['link'] + '" rel="stylesheet">')
-    }
-  })
-  $.each(js_files, function(i, js_file) {
-    if (!("html_only" in js_file && js_file['html_only'] && is_notebook)) {
-      h.append('<script src="' + js_file['link'] + '"></script>')
-    }
-  })
-
   $(".rendered_html").removeClass("rendered_html");
 
 
