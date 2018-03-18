@@ -116,6 +116,7 @@ div.output_text {
 =========================================
 */
 .code-fold-btn {
+  font-size: 1em;
   float: right !important;
   background-color: transparent;
   color: var(--font-color);
@@ -146,6 +147,7 @@ div.output_text {
 =========================================
 */
 .code-show-all, .code-hide-all {
+  font-size: 1em;
   float: right !important;
   background-color: transparent;
   color: var(--heading-color-75);

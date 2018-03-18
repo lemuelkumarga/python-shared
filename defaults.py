@@ -2,7 +2,8 @@
 """ =================================
     Load Packages
 ================================= """
-
+failed_loads = set()
+failed_loads_sub = set()
 '''
 @input packages a list of key value pairs, where:
                 key is the alias of the module
@@ -12,20 +13,22 @@
                    value is the name of the submodule itself
 '''
 def load(packages, subpackages):
-    uninstalled_str = ""
-        
+
+    global failed_loads;
+    global failed_loads_sub;
+
     for k, v in packages.items():
         try:
             globals()[k] = __import__(v)
         except ImportError:
-            uninstalled_str += v + " "
-            pass;
-
-    if (uninstalled_str != ""):
-        print("Some modules doesn't exist. Please install on terminal using: sudo pip install " + uninstalled_str);
-    
+            failed_loads.add(v)
+            
     for k, v in subpackages.items():
-        exec("globals()['"+k+"'] = " + v)
+        try: 
+            exec("globals()['"+k+"'] = " + v)
+        except NameError:
+            failed_loads_sub.add(v)
+            pass;
 
 
 """ =================================
@@ -63,6 +66,22 @@ load({"py" : "plotly"},
      {"plot" : "py.offline"})
 
 def defaults():
+
+    # Print uninstalled packages
+    if (len(failed_loads) > 0):
+        failed_str = ""
+        for p in failed_loads:
+            failed_str += p + " "
+        print("Some modules don't exist. Please install on terminal using: sudo pip install " + failed_str)
+        return;
+
+    # Print unloaded subpackages
+    if (len(failed_loads_sub) > 0):
+        failed_str = ""
+        for p in failed_loads_sub:
+            failed_str += p + ", "
+        print("Failed to load the following submodules: " + failed_str[:-2])
+        return;
 
     # Initialize pyplot notebook
     plot.init_notebook_mode(connected=True)

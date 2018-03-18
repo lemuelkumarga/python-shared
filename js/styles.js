@@ -45,7 +45,7 @@ $(document).ready(function(){
 
   /* Code Buttons for each section */
   var code_button_str = '<div class="code-fold-div">' + 
-                            '<button class="code-fold-btn" cshown="true">Hide</button>' +
+                            '<button class="btn btn-default btn-xs code-fold-btn" cshown="true">Hide</button>' +
                         '</div>';
 
   $(".input").parent().prepend(code_button_str);
@@ -58,8 +58,8 @@ $(document).ready(function(){
 
   /* Code Buttons for show all hide all */
   var code_overall_str = '<div class="code-fold-div">' + 
-                            '<button class="code-hide-all">Hide All Code</button>' +
-                            '<button class="code-show-all">Show All Code</button>' +
+                            '<button class="btn btn-default btn-xs code-hide-all">Hide All Code</button>' +
+                            '<button class="btn btn-default btn-xs code-show-all">Show All Code</button>' +
                         '</div>'
   $("#notebook-container").prepend(code_overall_str)
 
