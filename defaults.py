@@ -4,6 +4,7 @@
 ================================= """
 failed_loads = set()
 failed_loads_sub = set()
+
 '''
 @input packages a list of key value pairs, where:
                 key is the alias of the module
@@ -12,7 +13,7 @@ failed_loads_sub = set()
                    key is the alias of the submodule
                    value is the name of the submodule itself
 '''
-def load(packages, subpackages):
+def load(packages, subpackages = {}):
 
     global failed_loads;
     global failed_loads_sub;
@@ -30,6 +31,20 @@ def load(packages, subpackages):
             failed_loads_sub.add(v)
             pass;
 
+def print_failed_loads():
+    if (len(failed_loads) > 0):
+        failed_str = ""
+        for p in failed_loads:
+            failed_str += p + " "
+        print("Some modules don't exist. Please install on terminal using: sudo pip install " + failed_str)
+        return;
+
+    if (len(failed_loads_sub) > 0):
+        failed_str = ""
+        for p in failed_loads_sub:
+            failed_str += p + ", "
+        print("Failed to load the following submodules: " + failed_str[:-2])
+        return;    
 
 """ =================================
     Load Header (CSS + JS) Files
@@ -59,6 +74,145 @@ def stylize():
     return HTML(head_str)
 
 """ =================================
+    Get CSS Variables
+================================= """
+
+load({"re" : "re",
+      "os" : "os"})
+
+def grepl(pattern, l, exclude = False):
+    return list(filter(lambda s : not re.search(pattern,s) if exclude else re.search(pattern, s),l))
+
+def split_n_flat(pattern, l):
+    tmp = list(map(lambda s : re.split(pattern, s), l))
+    return [ item for sublist in tmp for item in sublist ]
+
+# Perform a cascading load, i.e. the first file to be found 
+# will be used to load all the css vars
+def load_css_vars(css_files):
+    for css_file in css_files:
+        if os.path.isfile(css_file):
+            css_contents = "{" + open(css_file,'r').read() + "}"
+            css_contents = re.sub('[\r\n\t]','',css_contents)
+            # Split Blocks
+            css_contents = re.split('}',css_contents)
+            # Find the ones that contain root
+            css_contents = grepl(':root',css_contents)
+            # Split Blocks
+            css_contents = split_n_flat(':root',css_contents)
+            # Only select body inside root
+            css_contents = grepl('{',css_contents)
+            # Split All Variables within root
+            css_contents = split_n_flat('{|;', css_contents)
+            # Remove comments embedded within the body
+            css_contents = split_n_flat('\*/', css_contents)
+            css_contents = grepl('/\*',css_contents, True)
+            # Trim Spaces
+            css_contents = list(map(lambda s : re.sub(' ','',s),css_contents))
+            # Remove empty strings
+            css_contents = list(filter(lambda s: len(s) > 0, css_contents))
+            # Find Key Value Pairs
+            css_contents = list(map(lambda s : re.split(":|,",s),css_contents))
+            css_contents = dict((l[0],l[1]) for l in css_contents)
+            return css_contents
+
+""" =================================
+    Get CSS Colors
+================================= """
+
+load({"collections":"collections"})
+
+def init_colors():
+
+    globals()['bg_color'] = css_vars["--pri"]
+    globals()['txt_color'] = css_vars["--font-color"]
+    globals()['ltxt_color'] = css_vars["--font-color-75"]
+
+    globals()['color_palette'] = [ v for k, v in css_vars.items() if "--color-" in k ]
+
+    hue_colors = ["yellow",
+                  "orange",
+                  "red",
+                  "purple",
+                  "blue",
+                  "cyan",
+                  "green"]
+    globals()['hue_palette'] = collections.OrderedDict()
+    for h in hue_colors:
+        globals()['hue_palette'][h] = css_vars["--" + h]
+
+# Function courtesy of John 1024
+# https://stackoverflow.com/questions/29643352/converting-hex-to-rgb-value-in-python
+def hex_to_rgb(color):
+    hex_c = color.lstrip("#")
+    return tuple(int(hex_c[i:i+2],16) for i in (0,2,4))
+
+# Interpolate between two colors
+def color_intermediary(col_start, col_end, ratio):
+    col0 = hex_to_rgb(col_start)
+    col1 = hex_to_rgb(col_end)
+    val = [0.,0.,0.]
+    for i in range(0,len(val)):
+        val[i] = int((1. - ratio) * col0[i] + ratio * col1[i])
+    return '#%02x%02x%02x' % tuple(val)
+
+# Returns a gradient palette. 
+# For the output, users can get an arbitrary amount of colors
+# by specifying the number he/she prefers using n_colors
+def color_brewer_palette(colors):
+    
+    def color_gradient_fn(n_colors):
+
+        # Create information about input of colors
+        stop_points = list(map(lambda i : 1. * i / (len(colors) - 1), range(0, len(colors))))
+        
+        # Create stops for which to be outputed
+        col_output_stops = list(map(lambda i : 1. * i / (n_colors - 1), range(0, n_colors)))
+        col_output = []
+
+        ind_t = 0
+        ind_tp1 = 1
+        for s in col_output_stops:
+
+            # Check if we are in the correct interval
+            while s > stop_points[ind_tp1]:
+                ind_t += 1
+                ind_tp1 += 1
+
+            # Now we should have stop_points[ind_t] < s <= stop_points[ind_tp1]
+            ratio = (s - stop_points[ind_t]) / (stop_points[ind_tp1] - stop_points[ind_t])
+            col_output.append(color_intermediary(colors[ind_t], colors[ind_tp1],ratio))
+
+        return col_output
+
+    return color_gradient_fn
+
+# Fades the color depending on the fading factor (0 to 1)
+def fade_color(color, fadingFactor):
+    return color_intermediary(bg_color, color, fadingFactor)
+    
+def get_color(inp = "", fadingFactor = 1.0):
+    
+    fader = lambda c : fade_color(c, fadingFactor)
+    tmp_color_palette = [ fader(c) for c in color_palette]
+    tmp_hue_palette = collections.OrderedDict((k,fader(c)) for k, c in hue_palette.items())
+
+    if (inp == ""):
+        # If nothing is specified, return the list of color palettes
+        return tmp_color_palette
+    elif (isinstance(inp,int)):
+        # If index is specified, return the index of the color palette
+        return tmp_color_palette[(inp + len(tmp_color_palette)) % len(tmp_color_palette)]
+    elif (inp in tmp_hue_palette):
+        # If palette is requested, return the palette
+        return tmp_hue_palette[inp]
+    elif (inp == "palette"):
+        # If palette is requested, return the palette
+        return color_brewer_palette(list(tmp_hue_palette.values()))
+    else:
+        return bg_color
+
+""" =================================
     Startup Function
 ================================= """
 
@@ -67,21 +221,15 @@ load({"py" : "plotly"},
 
 def defaults():
 
-    # Print uninstalled packages
-    if (len(failed_loads) > 0):
-        failed_str = ""
-        for p in failed_loads:
-            failed_str += p + " "
-        print("Some modules don't exist. Please install on terminal using: sudo pip install " + failed_str)
-        return;
+    # Print error in loading packages and subpackages
+    print_failed_loads()
 
-    # Print unloaded subpackages
-    if (len(failed_loads_sub) > 0):
-        failed_str = ""
-        for p in failed_loads_sub:
-            failed_str += p + ", "
-        print("Failed to load the following submodules: " + failed_str[:-2])
-        return;
+    # Initialize Css Variables
+    globals()['css_vars'] = load_css_vars(['../../shared/css/definitions.css',
+                                           'shared/css/defaults.css'])
+
+    # Initialize colors
+    init_colors()
 
     # Initialize pyplot notebook
     plot.init_notebook_mode(connected=True)
