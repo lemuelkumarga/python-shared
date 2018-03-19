@@ -122,7 +122,7 @@ def load_css_vars(css_files):
 
 load({"collections":"collections"})
 
-def init_colors():
+def init_colors(css_vars):
 
     globals()['bg_color'] = css_vars["--pri"]
     globals()['txt_color'] = css_vars["--font-color"]
@@ -224,12 +224,12 @@ def defaults():
     # Print error in loading packages and subpackages
     print_failed_loads()
 
-    # Initialize Css Variables
-    globals()['css_vars'] = load_css_vars(['../../shared/css/definitions.css',
-                                           'shared/css/defaults.css'])
+    # Initialize CSS Variables
+    css_vars = load_css_vars(['../../shared/css/definitions.css',
+                              'shared/css/defaults.css'])
 
     # Initialize colors
-    init_colors()
+    init_colors(css_vars)
 
     # Initialize pyplot notebook
     plot.init_notebook_mode(connected=True)
