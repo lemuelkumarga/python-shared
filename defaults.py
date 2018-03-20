@@ -2,56 +2,31 @@
 """ =================================
     Load Packages
 ================================= """
-failed_loads = set()
-failed_loads_sub = set()
+import importlib
+import pip
 
 '''
 @input packages a list of key value pairs, where:
                 key is the alias of the module
                 value is the name of the module itself
-@input subpackages a list of key value pairs, where:
-                   key is the alias of the submodule
-                   value is the name of the submodule itself
 '''
-def load(packages, subpackages = {}):
-
-    global failed_loads;
-    global failed_loads_sub;
+# Courtesy of rominf
+# https://stackoverflow.com/questions/12332975/installing-python-module-within-code
+def load(packages):
 
     for k, v in packages.items():
-        try:
-            globals()[k] = __import__(v)
-        except ImportError:
-            failed_loads.add(v)
-            
-    for k, v in subpackages.items():
-        try: 
-            exec("globals()['"+k+"'] = " + v)
-        except NameError:
-            failed_loads_sub.add(v)
-            pass;
-
-def print_failed_loads():
-    if (len(failed_loads) > 0):
-        failed_str = ""
-        for p in failed_loads:
-            failed_str += p + " "
-        print("Some modules don't exist. Please install on terminal using: sudo pip install " + failed_str)
-        return;
-
-    if (len(failed_loads_sub) > 0):
-        failed_str = ""
-        for p in failed_loads_sub:
-            failed_str += p + ", "
-        print("Failed to load the following submodules: " + failed_str[:-2])
-        return;    
-
+	    try:
+	        globals()[k] = importlib.import_module(v)
+	    except ImportError:
+	        print("Module " + v + " does not exist. Please search installation instructions for " + v + ".")
+	        pass
+	        
 """ =================================
     Load Header (CSS + JS) Files
 ================================= """
 
-load({"ip" : "IPython"},
-     {"HTML" : "ip.core.display.HTML"})
+load({"ip" : "IPython"})
+from IPython.core.display import HTML
 
 def stylize():
 
@@ -226,8 +201,7 @@ def get_color(inp = "", fadingFactor = 1.0):
     Static Plot settings
 ================================= """
 
-load({"mpl" : "matplotlib",
-	  "splot" : "matplotlib.pyplot"})
+load({"mpl" : "matplotlib"})
 
 def set_static_plots():
 	# Default Fonts
@@ -259,9 +233,6 @@ def set_static_plots():
 ================================= """
 
 def defaults():
-
-    # Print error in loading packages and subpackages
-    print_failed_loads()
 
     # Initialize CSS Variables
     css_vars = load_css_vars(['../../shared/css/definitions.css',
