@@ -108,21 +108,29 @@ def load_css_vars(css_files):
             css_contents = split_n_flat('\*/', css_contents)
             css_contents = grepl('/\*',css_contents, True)
             # Trim Spaces
-            css_contents = list(map(lambda s : re.sub(' ','',s),css_contents))
+            css_contents = list(map(lambda s : s.lstrip().rstrip(),css_contents))
             # Remove empty strings
             css_contents = list(filter(lambda s: len(s) > 0, css_contents))
             # Find Key Value Pairs
             css_contents = list(map(lambda s : re.split(":|,",s),css_contents))
-            css_contents = dict((l[0],l[1]) for l in css_contents)
-            return css_contents
+
+            # Assign key value pairs
+            css_dictionary = {}
+            for l in css_contents:
+            	k = l[0].lstrip().rstrip()
+            	# Trim Quotes
+            	v = list(map(lambda s : re.sub(r'^"|"$', '',re.sub(r"^'|'$","",s.lstrip().rstrip())),l[1:]))
+            	css_dictionary[k] = v[0] if len(v) == 1 else v
+
+            return css_dictionary
 
 """ =================================
-    Get CSS Colors
+    Get CSS Colors And Fonts
 ================================= """
 
 load({"collections":"collections"})
 
-def init_colors(css_vars):
+def init_colors_n_fonts(css_vars):
 
     globals()['bg_color'] = css_vars["--pri"]
     globals()['txt_color'] = css_vars["--font-color"]
@@ -140,6 +148,8 @@ def init_colors(css_vars):
     globals()['hue_palette'] = collections.OrderedDict()
     for h in hue_colors:
         globals()['hue_palette'][h] = css_vars["--" + h]
+
+    globals()['def_font'] = css_vars["--font-family"][0]
 
 # Function courtesy of John 1024
 # https://stackoverflow.com/questions/29643352/converting-hex-to-rgb-value-in-python
@@ -213,11 +223,40 @@ def get_color(inp = "", fadingFactor = 1.0):
         return bg_color
 
 """ =================================
-    Startup Function
+    Static Plot settings
 ================================= """
 
-load({"py" : "plotly"},
-     {"plot" : "py.offline"})
+load({"mpl" : "matplotlib",
+	  "splot" : "matplotlib.pyplot"})
+
+def set_static_plots():
+	# Default Fonts
+	mpl.rcParams['font.family'] = def_font
+	mpl.rcParams['text.color'] = txt_color
+	mpl.rcParams['font.size'] = 25
+	# Title Size
+	mpl.rcParams['figure.titlesize'] = 30
+	# Background
+	
+	# Figure
+	mpl.rcParams['figure.facecolor'] = bg_color
+
+	# Axes Sizes
+	mpl.rcParams['axes.facecolor'] = bg_color
+	mpl.rcParams['axes.edgecolor'] = ltxt_color
+	mpl.rcParams['axes.titlesize'] = 25
+	mpl.rcParams['axes.labelsize'] = 20
+	mpl.rcParams['xtick.color'] = ltxt_color
+	mpl.rcParams['ytick.color'] = ltxt_color
+	
+	# Legend
+	mpl.rcParams['legend.frameon'] = False
+	mpl.rcParams['legend.facecolor'] = bg_color
+	mpl.rcParams['legend.fontsize'] = 20
+
+""" =================================
+    Startup Function
+================================= """
 
 def defaults():
 
@@ -228,11 +267,11 @@ def defaults():
     css_vars = load_css_vars(['../../shared/css/definitions.css',
                               'shared/css/defaults.css'])
 
-    # Initialize colors
-    init_colors(css_vars)
+    # Initialize Colors
+    init_colors_n_fonts(css_vars)
 
-    # Initialize pyplot notebook
-    plot.init_notebook_mode(connected=True)
+    # Initialize Static Plots
+    set_static_plots()
 
     # Output HTML File
     return stylize()
