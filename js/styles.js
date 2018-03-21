@@ -74,5 +74,11 @@ $(document).ready(function(){
   } else {
     setCodeToHide(section_inputs, section_buttons, 0);
   }
-
+  
+  /* ============================================= 
+    Prevent autoscrolling of output divs
+  ============================================== */
+  IPython.OutputArea.prototype._should_scroll = function(lines) {
+    return false;
+  }
 });
