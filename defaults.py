@@ -67,35 +67,21 @@ def split_n_flat(pattern, l):
 def load_css_vars(css_files):
     for css_file in css_files:
         if os.path.isfile(css_file):
-            css_contents = "{" + open(css_file,'r').read() + "}"
+            css_contents = open(css_file,'r').read()
+            # Remove all spacelines
             css_contents = re.sub('[\r\n\t]','',css_contents)
-            # Split Blocks
-            css_contents = re.split('}',css_contents)
-            # Find the ones that contain root
-            css_contents = grepl(':root',css_contents)
-            # Split Blocks
-            css_contents = split_n_flat(':root',css_contents)
-            # Only select body inside root
-            css_contents = grepl('{',css_contents)
-            # Split All Variables within root
-            css_contents = split_n_flat('{|;', css_contents)
-            # Remove comments embedded within the body
-            css_contents = split_n_flat('\*/', css_contents)
-            css_contents = grepl('/\*',css_contents, True)
-            # Trim Spaces
-            css_contents = list(map(lambda s : s.lstrip().rstrip(),css_contents))
-            # Remove empty strings
-            css_contents = list(filter(lambda s: len(s) > 0, css_contents))
-            # Find Key Value Pairs
-            css_contents = list(map(lambda s : re.split(":|,",s),css_contents))
-
+            # Remove all comments
+            css_contents = re.sub("/\*[^\*]*\*/",'',css_contents)
+            # Find root blocks
+            css_contents = re.findall(":root[ ]*\{([^\{\}]*)\}",css_contents)
+            # Get all variables
+            css_contents = " ".join(css_contents).split(";")
+            # Trim each variable strings
+            css_contents = [ v.lstrip().rstrip() for v in css_contents ]
+            # Split each variable string to get key value pairings
+            css_contents = [ re.split("[ ]*:[ ']*|[' ]*,[' ]*",v) for v in css_contents ]
             # Assign key value pairs
-            css_dictionary = {}
-            for l in css_contents:
-            	k = l[0].lstrip().rstrip()
-            	# Trim Quotes
-            	v = list(map(lambda s : re.sub(r'^"|"$', '',re.sub(r"^'|'$","",s.lstrip().rstrip())),l[1:]))
-            	css_dictionary[k] = v[0] if len(v) == 1 else v
+            css_dictionary = dict((v[0], v[1] if len(v) == 2 else tuple(v[1:])) for v in css_contents if len(v) >= 2)
 
             return css_dictionary
 
