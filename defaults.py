@@ -55,13 +55,6 @@ def stylize():
 load({"re" : "re",
       "os" : "os"})
 
-def grepl(pattern, l, exclude = False):
-    return list(filter(lambda s : not re.search(pattern,s) if exclude else re.search(pattern, s),l))
-
-def split_n_flat(pattern, l):
-    tmp = list(map(lambda s : re.split(pattern, s), l))
-    return [ item for sublist in tmp for item in sublist ]
-
 # Perform a cascading load, i.e. the first file to be found 
 # will be used to load all the css vars
 def load_css_vars(css_files):
