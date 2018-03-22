@@ -164,13 +164,14 @@ div.output_text {
 }
 /*
 =========================================
-    Plotly Plots
+   Images and Interactive Plots
 =========================================
 */
 /* Centerize */
+.output_png.output_subarea,
 .output_html.output_subarea,
 .svg-container {
-  min-width: 300px;
+  flex: inherit;
   margin-left: auto !important;
   margin-right: auto !important;
 }
