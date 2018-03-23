@@ -204,6 +204,7 @@ def set_static_plots():
     mpl.rcParams['ytick.color'] = ltxt_color
     
     # Legend
+    mpl.rcParams['legend.loc'] = 'upper right'
     mpl.rcParams['legend.frameon'] = False
     mpl.rcParams['legend.facecolor'] = bg_color
     mpl.rcParams['legend.fontsize'] = 20
