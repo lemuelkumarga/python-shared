@@ -175,3 +175,69 @@ div.output_text {
   margin-left: auto !important;
   margin-right: auto !important;
 }
+
+/*
+=========================================
+    Tables
+=========================================
+*/
+
+/* Tables */
+table {
+  width: auto !important;
+  min-width: 500px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Cell Adjustments */
+th, td {
+  padding:  1rem 2rem;
+}
+
+/* Normal Cells */
+table {
+  font-family: var(--font-family);
+  border-color: transparent;
+}
+
+td {
+  color: var(--font-color);
+}
+
+/* Header Cells */
+th {
+  font-weight: normal;
+  color: var(--heading-color);
+}
+
+thead tr
+{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+thead tr:last-child th
+{
+  border-bottom: 1px solid var(--heading-color);
+}
+
+
+/*
+=========================================
+   Highlights
+=========================================
+*/
+.hl {
+  font-weight: bold;
+  color: var(--heading-color);
+}
+.st {
+  display: block;
+  padding: 0.5rem 0px 0.5rem 1rem;
+  margin: 2rem 0px 2rem 0px;
+  color: var(--font-color);
+  font-weight: 500;
+  border-left: 5px solid var(--font-color);
+}

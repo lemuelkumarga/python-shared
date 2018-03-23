@@ -15,12 +15,12 @@ import pip
 def load(packages):
 
     for k, v in packages.items():
-	    try:
-	        globals()[k] = importlib.import_module(v)
-	    except ImportError:
-	        print("Module " + v + " does not exist. Please search installation instructions for " + v + ".")
-	        pass
-	        
+        try:
+            globals()[k] = importlib.import_module(v)
+        except ImportError:
+            print("Module " + v + " does not exist. Please search installation instructions for " + v + ".")
+            pass
+            
 """ =================================
     Load Header (CSS + JS) Files
 ================================= """
@@ -183,29 +183,30 @@ def get_color(inp = "", fadingFactor = 1.0):
 load({"mpl" : "matplotlib"})
 
 def set_static_plots():
-	# Default Fonts
-	mpl.rcParams['font.family'] = def_font
-	mpl.rcParams['text.color'] = txt_color
-	mpl.rcParams['font.size'] = 25
-	# Title Size
-	mpl.rcParams['figure.titlesize'] = 30
-	# Background
-	
-	# Figure
-	mpl.rcParams['figure.facecolor'] = bg_color
+    # Default Fonts
+    mpl.rcParams['font.family'] = def_font
+    mpl.rcParams['text.color'] = txt_color
+    mpl.rcParams['font.size'] = 25
+    # Title Size
+    mpl.rcParams['figure.titlesize'] = 30
+    mpl.rcParams['axes.titlepad'] = 20
 
-	# Axes Sizes
-	mpl.rcParams['axes.facecolor'] = bg_color
-	mpl.rcParams['axes.edgecolor'] = ltxt_color
-	mpl.rcParams['axes.titlesize'] = 25
-	mpl.rcParams['axes.labelsize'] = 20
-	mpl.rcParams['xtick.color'] = ltxt_color
-	mpl.rcParams['ytick.color'] = ltxt_color
-	
-	# Legend
-	mpl.rcParams['legend.frameon'] = False
-	mpl.rcParams['legend.facecolor'] = bg_color
-	mpl.rcParams['legend.fontsize'] = 20
+    # Figure
+    mpl.rcParams['figure.facecolor'] = bg_color
+
+    # Axes Sizes
+    mpl.rcParams['axes.facecolor'] = bg_color
+    mpl.rcParams['axes.edgecolor'] = ltxt_color
+    mpl.rcParams['axes.titlesize'] = 25
+    mpl.rcParams['axes.labelpad'] = 10
+    mpl.rcParams['axes.labelsize'] = 20
+    mpl.rcParams['xtick.color'] = ltxt_color
+    mpl.rcParams['ytick.color'] = ltxt_color
+    
+    # Legend
+    mpl.rcParams['legend.frameon'] = False
+    mpl.rcParams['legend.facecolor'] = bg_color
+    mpl.rcParams['legend.fontsize'] = 20
 
 """ =================================
     Startup Function
