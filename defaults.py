@@ -213,3 +213,34 @@ mpl.rcParams['legend.loc'] = 'upper right'
 mpl.rcParams['legend.frameon'] = False
 mpl.rcParams['legend.facecolor'] = bg_color
 mpl.rcParams['legend.fontsize'] = 20
+
+""" =================================
+    Dynamic Plot settings
+================================= """
+
+load({"plotly":"plotly"})
+import plotly.graph_objs as py_go
+
+plotly.offline.init_notebook_mode(connected=True)
+
+py_layout = py_go.Layout(
+    font = dict(
+        family = def_font,
+        color = txt_color
+    ),
+    paper_bgcolor=bg_color,
+    plot_bgcolor=bg_color,
+    xaxis = dict(color=ltxt_color),
+    yaxis = dict(color=ltxt_color),
+    # Polar Variables
+    polar = dict(
+        bgcolor = bg_color,
+        angularaxis = dict(
+            color=ltxt_color,
+            direction="clockwise"
+        ),
+        radialaxis = dict(
+            color=ltxt_color
+        )
+    )
+)
