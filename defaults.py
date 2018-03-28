@@ -228,6 +228,7 @@ py_layout = py_go.Layout(
         family = def_font,
         color = txt_color
     ),
+    margin = dict(t=50,r=30,b=80,l=50),
     paper_bgcolor=bg_color,
     plot_bgcolor=bg_color,
     xaxis = dict(color=ltxt_color),

@@ -169,11 +169,15 @@ div.output_text {
 */
 /* Centerize */
 .output_png.output_subarea,
+.output_html.output_subarea {
+  min-width: 100%;
+}
+.output_png.output_subarea,
 .output_html.output_subarea,
+.plotly-graph-div.js-plotly-plot,
 .svg-container {
-  flex: inherit;
   margin-left: auto !important;
-  margin-right: auto !important;
+  margin-right: auto !important;	
 }
 
 /*
