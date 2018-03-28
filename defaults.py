@@ -6,17 +6,19 @@ import importlib
 import pip
 
 '''
+@input ipython_globals globals of parent
 @input packages a list of key value pairs, where:
                 key is the alias of the module
                 value is the name of the module itself
 '''
 # Courtesy of rominf
 # https://stackoverflow.com/questions/12332975/installing-python-module-within-code
-def load(packages):
+def load(packages,
+         ipython_globals=globals()):
 
     for k, v in packages.items():
         try:
-            globals()[k] = importlib.import_module(v)
+            ipython_globals[k] = importlib.import_module(v)
         except ImportError:
             print("Module " + v + " does not exist. Please search installation instructions for " + v + ".")
             pass
@@ -57,7 +59,7 @@ load({"re" : "re",
 
 # Perform a cascading load, i.e. the first file to be found 
 # will be used to load all the css vars
-def load_css_vars(css_files):
+def __load_css_vars(css_files):
     for css_file in css_files:
         if os.path.isfile(css_file):
             css_contents = open(css_file,'r').read()
@@ -78,52 +80,36 @@ def load_css_vars(css_files):
 
             return css_dictionary
 
+__css_vars = __load_css_vars(['../../shared/css/definitions.css',
+                              'shared/css/defaults.css'])
+
 """ =================================
     Get CSS Colors And Fonts
 ================================= """
 
 load({"collections":"collections"})
 
-def init_colors_n_fonts(css_vars):
+### Helper Functions ###
 
-    globals()['bg_color'] = css_vars["--pri"]
-    globals()['txt_color'] = css_vars["--font-color"]
-    globals()['ltxt_color'] = css_vars["--font-color-75"]
-
-    globals()['color_palette'] = [ v for k, v in css_vars.items() if "--color-" in k ]
-
-    hue_colors = ["yellow",
-                  "orange",
-                  "red",
-                  "purple",
-                  "blue",
-                  "cyan",
-                  "green"]
-    globals()['hue_palette'] = collections.OrderedDict()
-    for h in hue_colors:
-        globals()['hue_palette'][h] = css_vars["--" + h]
-
-    globals()['def_font'] = css_vars["--font-family"][0]
+__color_palette = [ v for k, v in __css_vars.items() if "--color-" in k ]
+__hue_palette = collections.OrderedDict((h,__css_vars["--" + h]) for h in ["yellow",
+                                                                          "orange",
+                                                                          "red",
+                                                                          "purple",
+                                                                          "blue",
+                                                                          "cyan",
+                                                                          "green"])
 
 # Function courtesy of John 1024
 # https://stackoverflow.com/questions/29643352/converting-hex-to-rgb-value-in-python
-def hex_to_rgb(color):
+def __hex_to_rgb(color):
     hex_c = color.lstrip("#")
     return tuple(int(hex_c[i:i+2],16) for i in (0,2,4))
-
-# Interpolate between two colors
-def color_intermediary(col_start, col_end, ratio):
-    col0 = hex_to_rgb(col_start)
-    col1 = hex_to_rgb(col_end)
-    val = [0.,0.,0.]
-    for i in range(0,len(val)):
-        val[i] = int((1. - ratio) * col0[i] + ratio * col1[i])
-    return '#%02x%02x%02x' % tuple(val)
 
 # Returns a gradient palette. 
 # For the output, users can get an arbitrary amount of colors
 # by specifying the number he/she prefers using n_colors
-def color_brewer_palette(colors):
+def __color_brewer_palette(colors):
     
     def color_gradient_fn(n_colors):
 
@@ -145,21 +131,39 @@ def color_brewer_palette(colors):
 
             # Now we should have stop_points[ind_t] < s <= stop_points[ind_tp1]
             ratio = (s - stop_points[ind_t]) / (stop_points[ind_tp1] - stop_points[ind_t])
-            col_output.append(color_intermediary(colors[ind_t], colors[ind_tp1],ratio))
+            col_output.append(pollute_color(colors[ind_t], colors[ind_tp1],ratio))
 
         return col_output
 
     return color_gradient_fn
 
+### Public Functions ###
+
+def_font = __css_vars["--font-family"][0]
+bg_color = __css_vars["--pri"]
+txt_color = __css_vars["--font-color"]
+ltxt_color = __css_vars["--font-color-75"]
+
+# Interpolate between two colors
+# Ratio determines the degree of pollution
+# 0 means no pollution 1 means all polluted color
+def pollute_color(original_col, pollute_col, ratio):
+    col0 = __hex_to_rgb(original_col)
+    col1 = __hex_to_rgb(pollute_col)
+    val = [0.,0.,0.]
+    for i in range(0,len(val)):
+        val[i] = int((1. - ratio) * col0[i] + ratio * col1[i])
+    return '#%02x%02x%02x' % tuple(val)
+
 # Fades the color depending on the fading factor (0 to 1)
 def fade_color(color, fadingFactor):
-    return color_intermediary(bg_color, color, fadingFactor)
+    return pollute_color(bg_color, color, fadingFactor)
     
 def get_color(inp = "", fadingFactor = 1.0):
     
     fader = lambda c : fade_color(c, fadingFactor)
-    tmp_color_palette = [ fader(c) for c in color_palette]
-    tmp_hue_palette = collections.OrderedDict((k,fader(c)) for k, c in hue_palette.items())
+    tmp_color_palette = [ fader(c) for c in __color_palette]
+    tmp_hue_palette = collections.OrderedDict((k,fader(c)) for k, c in __hue_palette.items())
 
     if (inp == ""):
         # If nothing is specified, return the list of color palettes
@@ -172,7 +176,7 @@ def get_color(inp = "", fadingFactor = 1.0):
         return tmp_hue_palette[inp]
     elif (inp == "palette"):
         # If palette is requested, return the palette
-        return color_brewer_palette(list(tmp_hue_palette.values()))
+        return __color_brewer_palette(list(tmp_hue_palette.values()))
     else:
         return bg_color
 
@@ -182,48 +186,30 @@ def get_color(inp = "", fadingFactor = 1.0):
 
 load({"mpl" : "matplotlib"})
 
-def set_static_plots():
-    # Default Fonts
-    mpl.rcParams['font.family'] = def_font
-    mpl.rcParams['text.color'] = txt_color
-    mpl.rcParams['font.size'] = 25
-    # Title Size
-    mpl.rcParams['figure.titlesize'] = 30
-    mpl.rcParams['axes.titlepad'] = 20
+# Default Fonts
+mpl.rcParams['font.family'] = def_font
+mpl.rcParams['text.color'] = txt_color
+mpl.rcParams['font.size'] = 25
+# Title Size
+mpl.rcParams['axes.titlesize'] = 30
+mpl.rcParams['axes.titlepad'] = 20
 
-    # Figure
-    mpl.rcParams['figure.facecolor'] = bg_color
+# Figure
+mpl.rcParams['figure.facecolor'] = bg_color
 
-    # Axes Sizes
-    mpl.rcParams['axes.facecolor'] = bg_color
-    mpl.rcParams['axes.edgecolor'] = ltxt_color
-    mpl.rcParams['axes.titlesize'] = 25
-    mpl.rcParams['axes.labelpad'] = 10
-    mpl.rcParams['axes.labelsize'] = 20
-    mpl.rcParams['xtick.color'] = ltxt_color
-    mpl.rcParams['ytick.color'] = ltxt_color
-    
-    # Legend
-    mpl.rcParams['legend.loc'] = 'upper right'
-    mpl.rcParams['legend.frameon'] = False
-    mpl.rcParams['legend.facecolor'] = bg_color
-    mpl.rcParams['legend.fontsize'] = 20
+# Axes Sizes
+mpl.rcParams['axes.facecolor'] = bg_color
+mpl.rcParams['axes.edgecolor'] = ltxt_color
+mpl.rcParams['axes.labelsize'] = 25
+mpl.rcParams['axes.labelpad'] = 10
+mpl.rcParams['axes.labelcolor'] = ltxt_color
+mpl.rcParams['xtick.labelsize'] = 20
+mpl.rcParams['ytick.labelsize'] = 20
+mpl.rcParams['xtick.color'] = ltxt_color
+mpl.rcParams['ytick.color'] = ltxt_color
 
-""" =================================
-    Startup Function
-================================= """
-
-def defaults():
-
-    # Initialize CSS Variables
-    css_vars = load_css_vars(['../../shared/css/definitions.css',
-                              'shared/css/defaults.css'])
-
-    # Initialize Colors
-    init_colors_n_fonts(css_vars)
-
-    # Initialize Static Plots
-    set_static_plots()
-
-    # Output HTML File
-    return stylize()
+# Legend
+mpl.rcParams['legend.loc'] = 'upper right'
+mpl.rcParams['legend.frameon'] = False
+mpl.rcParams['legend.facecolor'] = bg_color
+mpl.rcParams['legend.fontsize'] = 20
