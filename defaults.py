@@ -91,7 +91,7 @@ load({"collections":"collections"})
 
 ### Helper Functions ###
 
-__color_palette = [ v for k, v in __css_vars.items() if "--color-" in k ]
+__color_palette = [ __css_vars["--color-" + str(i)] for i in range(1,6)]
 __hue_palette = collections.OrderedDict((h,__css_vars["--" + h]) for h in ["yellow",
                                                                           "orange",
                                                                           "red",
