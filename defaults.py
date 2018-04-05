@@ -245,3 +245,17 @@ py_layout = py_go.Layout(
         )
     )
 )
+
+py_config = dict(
+    modeBarButtonsToRemove = ['toImage',
+                              'select2d',
+                              'lasso2d',
+                              'zoomIn2d',
+                              'zoomOut2d',
+                              'autoScale2d',
+                              'toggleSpikelines',
+                              'hoverClosestCartesian',
+                              'hoverCompareCartesian',
+                              'toggleHover',
+                              'sendDataToCloud']
+)
