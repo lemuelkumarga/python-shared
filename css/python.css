@@ -175,6 +175,8 @@ div.output_text {
 .output_png.output_subarea,
 .output_html.output_subarea,
 .plotly-graph-div.js-plotly-plot,
+div.output_area img,
+div.output_area svg,
 .svg-container {
   margin-left: auto !important;
   margin-right: auto !important;	
