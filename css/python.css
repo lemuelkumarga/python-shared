@@ -52,6 +52,8 @@ div.output_area pre {
 /* Code Blocks: Code */
 div.input {
     margin: 1rem 0px;
+    /* by default hide */
+    display: none;
 }
 div.input_area {
 
@@ -101,6 +103,8 @@ div.input_area {
 
 /* Code Blocks: Results */
 div.output_text {
+  min-width: 100%;
+
   background-color: var(--pri);
   padding: 0px 1rem;
 
@@ -110,6 +114,8 @@ div.output_text {
   
   color: var(--font-color);
 }
+
+
 /*
 =========================================
     Section Codes
@@ -180,6 +186,10 @@ div.output_area svg,
 .svg-container {
   margin-left: auto !important;
   margin-right: auto !important;	
+}
+
+div.output_area img {
+	display: block;
 }
 
 /*
