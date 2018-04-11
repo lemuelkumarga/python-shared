@@ -2,9 +2,10 @@
             Container Definitions
 ======================================== */
 
-/* Change Background */
+/* For Notebooks: Change Background */
 .notebook_app {
     background-color: var(--pri);
+
 }
 
 /* Remove border in container */
@@ -54,6 +55,10 @@ div.input {
     margin: 1rem 0px;
     /* by default hide */
     display: none;
+}
+/* For Notebooks: show */
+.notebook_app div.input {
+    display: inherit;
 }
 div.input_area {
 
