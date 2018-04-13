@@ -29,8 +29,9 @@ p {
     margin-bottom: 1rem;
 }
 
-@media (min-width: 370px) {
-    p, ul, ol { text-align: justify; }
+p, ul, ol { 
+  text-align: justify; 
+  hyphens: auto;
 }
 
 /* Remove Anchor Links */
