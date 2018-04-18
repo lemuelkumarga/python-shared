@@ -25,11 +25,6 @@ h1,h2,h3,h4,h5,h6
   margin-bottom: 2rem;
 }
 
-h4.date {
-  color: var(--font-color-50);
-  font-size: 1.0em;
-}
-
 p {
     margin-bottom: 1rem;
 }
@@ -49,15 +44,19 @@ p, ul, ol {
 h4 .meta {
   color: var(--font-color-50);
   font-style:normal;
+
 }
 
-h4 .writer {
-  font-size: 1.0em;
+h4.author {
+  font-size: 1.5em;
+  margin-bottom: 0.5rem;
 }
 
-h4 .date {
-  font-size: 0.8em;
+h4.date {
+  font-size: 1.1em;
+  margin-top: 0.5rem;
 }
+
 /*
 =========================================
     Code Blocks
