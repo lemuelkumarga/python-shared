@@ -5,7 +5,6 @@
 /* For Notebooks: Change Background */
 .notebook_app {
     background-color: var(--pri);
-
 }
 
 /* Remove border in container */
@@ -20,6 +19,7 @@
 /* Make sure that we inherit default
 font size from body */
 div#notebook { 
+  padding: 0px; /* To make sure that iframe does not get cut off */
   font-size: inherit; 
 }
 
