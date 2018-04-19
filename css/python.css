@@ -10,6 +10,8 @@
 
 /* Remove border in container */
 #notebook-container {
+    max-width: 950px;
+    padding: 0px 15px;
     background-color: inherit;
     -webkit-box-shadow: inherit;
     box-shadow: inherit;
@@ -19,6 +21,12 @@
 font size from body */
 div#notebook { 
   font-size: inherit; 
+}
+
+/* Make sure that there is no padding
+for md cell or python cell */
+div.cell, div.text_cell_render {
+  padding: 0px;
 }
 /* =======================================
             Headers & Paragraphs
