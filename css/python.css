@@ -26,7 +26,8 @@ div#notebook {
 /* Make sure that there is no padding
 for md cell or python cell */
 div.cell, div.text_cell_render {
-  padding: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 /* =======================================
             Headers & Paragraphs
