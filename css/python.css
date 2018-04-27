@@ -10,7 +10,8 @@
 /* Remove border in container */
 #notebook-container {
     max-width: 950px;
-    padding: 0px 15px;
+    width: 95%;
+    padding: 0px 20px;
     background-color: inherit;
     -webkit-box-shadow: inherit;
     box-shadow: inherit;
