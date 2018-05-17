@@ -9,7 +9,7 @@
 
 /* Remove border in container */
 #notebook-container {
-    max-width: 950px;
+    max-width: 750px;
     width: 95%;
     padding: 0px 20px;
     background-color: inherit;
