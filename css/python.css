@@ -45,7 +45,6 @@ p {
 }
 
 p, ul, ol { 
-  text-align: justify; 
   hyphens: auto;
 }
 
