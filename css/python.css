@@ -44,10 +44,6 @@ p {
     margin-bottom: 1rem;
 }
 
-p, ul, ol { 
-  hyphens: auto;
-}
-
 /* Remove Anchor Links */
 .anchor-link { display:none }
 
