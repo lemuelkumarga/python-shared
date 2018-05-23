@@ -44,6 +44,11 @@ p {
     margin-bottom: 1rem;
 }
 
+/* Enable liaising to make font smoother */
+body {
+	-webkit-font-smoothing: antialiased;
+}
+
 /* Remove Anchor Links */
 .anchor-link { display:none }
 
