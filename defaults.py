@@ -223,6 +223,7 @@ import plotly.graph_objs as py_go
 
 plotly.offline.init_notebook_mode(connected=True)
 
+py_ltxt_color=fade_color(txt_color,0.5)
 py_layout = py_go.Layout(
     font = dict(
         family = def_font,
@@ -231,17 +232,21 @@ py_layout = py_go.Layout(
     margin = dict(t=50,r=30,b=80,l=50),
     paper_bgcolor=bg_color,
     plot_bgcolor=bg_color,
-    xaxis = dict(color=ltxt_color),
-    yaxis = dict(color=ltxt_color),
+    xaxis = dict(color=py_ltxt_color),
+    yaxis = dict(color=py_ltxt_color),
     # Polar Variables
     polar = dict(
         bgcolor = bg_color,
         angularaxis = dict(
-            color=ltxt_color,
+            color=txt_color,
+            gridcolor=py_ltxt_color,
+            linecolor=txt_color,
             direction="clockwise"
         ),
         radialaxis = dict(
-            color=ltxt_color
+            color=txt_color,
+            gridcolor=py_ltxt_color,
+            linecolor=txt_color
         )
     )
 )
