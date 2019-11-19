@@ -189,9 +189,9 @@ load({"mpl" : "matplotlib"})
 # Default Fonts
 mpl.rcParams['font.family'] = def_font
 mpl.rcParams['text.color'] = txt_color
-mpl.rcParams['font.size'] = 25
+mpl.rcParams['font.size'] = 30
 # Title Size
-mpl.rcParams['axes.titlesize'] = 30
+mpl.rcParams['axes.titlesize'] = 40
 mpl.rcParams['axes.titlepad'] = 20
 
 # Figure
@@ -200,11 +200,11 @@ mpl.rcParams['figure.facecolor'] = bg_color
 # Axes Sizes
 mpl.rcParams['axes.facecolor'] = bg_color
 mpl.rcParams['axes.edgecolor'] = ltxt_color
-mpl.rcParams['axes.labelsize'] = 25
+mpl.rcParams['axes.labelsize'] = 30
 mpl.rcParams['axes.labelpad'] = 10
 mpl.rcParams['axes.labelcolor'] = ltxt_color
-mpl.rcParams['xtick.labelsize'] = 20
-mpl.rcParams['ytick.labelsize'] = 20
+mpl.rcParams['xtick.labelsize'] = 25
+mpl.rcParams['ytick.labelsize'] = 25
 mpl.rcParams['xtick.color'] = ltxt_color
 mpl.rcParams['ytick.color'] = ltxt_color
 
