@@ -191,7 +191,7 @@ mpl.rcParams['font.family'] = def_font
 mpl.rcParams['text.color'] = txt_color
 mpl.rcParams['font.size'] = 30
 # Title Size
-mpl.rcParams['axes.titlesize'] = 40
+mpl.rcParams['axes.titlesize'] = 35
 mpl.rcParams['axes.titlepad'] = 20
 
 # Figure
