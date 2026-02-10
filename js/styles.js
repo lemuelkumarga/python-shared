@@ -5,7 +5,7 @@
 
 $(document).ready(function(){
 
-  var is_notebook = $(".notebook_app").length;
+  var is_notebook = $(".jpNotebook").length;
 
   /* ============================================= 
     Edit Metadata
@@ -15,10 +15,11 @@ $(document).ready(function(){
   $("head").append('<meta name="viewport" content="width=device-width, initial-scale=1">')
   
   /* ============================================= 
-    Remove unnecessary classes
+    Remove unnecessary classes and add final_output_identifier
   ============================================== */
-    
-  $(".rendered_html").removeClass("rendered_html");
+  
+  $("body").addClass("jp-RenderedHTML");
+  $(".jp-RenderedHTMLCommon").removeClass("jp-RenderedHTMLCommon"); 
 
 
   /* ============================================= 
@@ -43,22 +44,22 @@ $(document).ready(function(){
                             '<button class="btn btn-default btn-xs code-fold-btn" cshown="true">Hide</button>' +
                         '</div>';
 
-  $(".input").parent().prepend(code_button_str);
+  $(".jp-CodeCell > .jp-Cell-inputWrapper").parent().prepend(code_button_str);
   
   $(".code-fold-btn").on("click", function () {
     var tag = $(this).attr("cshown");
     var toggle_function = tag == "false" ? setCodeToShow : setCodeToHide;
-    toggle_function($(this).parent().siblings(".input"), $(this));
+    toggle_function($(this).parent().siblings(".jp-Cell-inputWrapper"), $(this));
   });
 
   /* Code Buttons for show all hide all */
-  var code_overall_str = '<div class="code-fold-div">' + 
+  var code_overall_str = '<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell"><div class="jp-Cell-inputWrapper" tabindex="0"><div class="code-fold-div"><div class="jp-InputArea jp-Cell-inputArea">' + 
                             '<button class="btn btn-default btn-xs code-hide-all">Hide All Code</button>' +
                             '<button class="btn btn-default btn-xs code-show-all">Show All Code</button>' +
-                        '</div>'
-  $("#notebook-container").prepend(code_overall_str)
+                        '</div></div></div></div>'
+  $("main").prepend(code_overall_str)
 
-  var section_inputs = $(".input");
+  var section_inputs = $(".jp-CodeCell > .jp-Cell-inputWrapper");
   var section_buttons = $(".code-fold-btn");
   $(".code-hide-all").on("click", function() {
       setCodeToHide(section_inputs, section_buttons);  

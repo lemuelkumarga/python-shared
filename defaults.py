@@ -66,9 +66,9 @@ def __load_css_vars(css_files):
             # Remove all spacelines
             css_contents = re.sub('[\r\n\t]','',css_contents)
             # Remove all comments
-            css_contents = re.sub("/\*[^\*]*\*/",'',css_contents)
+            css_contents = re.sub("/\\*[^\\*]*\\*/",'',css_contents)
             # Find root blocks
-            css_contents = re.findall(":root[ ]*\{([^\{\}]*)\}",css_contents)
+            css_contents = re.findall(":root[ ]*\\{([^\\{\\}]*)\\}",css_contents)
             # Get all variables
             css_contents = " ".join(css_contents).split(";")
             # Trim each variable strings
